@@ -1,0 +1,16 @@
+version: '3'
+services:
+  caddy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - ABUSEIPDB_API_DOWNLOAD=true
+      - RATE_LIMIT_EVENTS=${RATE_LIMIT_EVENTS:-1000}
+      - RATE_LIMIT_WINDOW=${RATE_LIMIT_WINDOW:-1s}
+    volumes:
+      - ../../tests/Caddyfile:/etc/caddy/Caddyfile
+      - ../../tests/rate_limited_ips:/etc/caddy/rate_limited_ips
+    ports:
+      - "80:80"
+      - "443:443"
