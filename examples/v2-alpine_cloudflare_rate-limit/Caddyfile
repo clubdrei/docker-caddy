@@ -1,5 +1,5 @@
 #
-# This example adds a rate limit for all IPs in "abuseipdb/s100-7d.ipv4.Caddyfile" and "127.18.0.1"
+# This example adds a rate limit for all IPs in "abuseipdb/s100-7d.ipv4.caddyfile" and "127.18.0.1"
 # Check https://github.com/mholt/caddy-ratelimit for more details about the rate_limit module
 #
 :80 {
@@ -16,7 +16,8 @@
     @rateLimitedIPs {
         # Add your own IP here to check if the rate limit works as expected
         remote_ip 172.18.0.1
-        import abuseipdb/s100-7d.ipv4.Caddyfile
+        import abuseipdb/s100-7d.ipv4.caddyfile
+        import microsoft-public-ip-space/current.caddyfile
     }
 
     rate_limit @rateLimitedIPs {
