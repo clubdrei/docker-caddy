@@ -4,8 +4,6 @@ on:
   push:
     branches-ignore:
       - main
-  schedule:
-    - cron: "41 9 * * *"
 
 jobs:
   # Republish the default caddy:2-alpine docker image on Quay.io
