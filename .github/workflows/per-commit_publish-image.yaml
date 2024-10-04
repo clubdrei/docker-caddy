@@ -23,7 +23,8 @@ jobs:
           docker pull caddy:2-alpine
           docker tag caddy:2-alpine ${{ vars.CI_REGISTRY_IMAGE }}:${{ github.sha }}_v2-alpine
           docker push ${{ vars.CI_REGISTRY_IMAGE }}:${{ github.sha }}_v2-alpine
-  # Build a customer Caddy docker image with Cloudflare DNS support and push it to Quay.io
+  # Build a custom Caddy docker image with the modules listed below & push it to Quay.io
+  # * dns.providers.cloudflare: https://github.com/caddy-dns/cloudflare
   v2-alpine_cloudflare:
     runs-on: ubuntu-latest
     steps:
