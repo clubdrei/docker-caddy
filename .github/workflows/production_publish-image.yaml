@@ -1,6 +1,9 @@
-name: "Update docker images"
+name: "Update docker images (production)"
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
   schedule:
     - cron: "41 9 * * *"
 
@@ -8,6 +11,7 @@ jobs:
   # Republish the default caddy:2-alpine docker image on Quay.io
   v2-alpine:
     runs-on: ubuntu-latest
+    environment: Production
     steps:
       - name: "Login to ${{ vars.CI_REGISTRY }}"
         uses: docker/login-action@v3
@@ -23,6 +27,7 @@ jobs:
   # Build a customer Caddy docker image with Cloudflare DNS support and push it to Quay.io
   v2-alpine_cloudflare:
     runs-on: ubuntu-latest
+    environment: Production
     steps:
       - name: "Login to ${{ vars.CI_REGISTRY }}"
         uses: docker/login-action@v3
