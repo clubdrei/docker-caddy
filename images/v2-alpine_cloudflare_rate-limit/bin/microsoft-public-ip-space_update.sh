@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Microsoft landing page which contains the URL to the current public IP CSV
-PAGE_URL="https://www.microsoft.com/en-us/download/details.aspx?id=53602"
+PAGE_URL="https://www.microsoft.com/en-us/download/confirmation.aspx?id=53602"
 
 # Microsoft blocks requests from wget without a valid user agent, so we fake one
 USER_AGENT="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.60 Safari/537.36"
@@ -9,8 +9,11 @@ USER_AGENT="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
 # Output file name
 OUTPUT_FILE="${MICROSOFT_PUBLIC_IP_SPACE_LOCAL_BASE_DIRECTORY}/${MICROSOFT_PUBLIC_IP_SPACE_LOCAL_FILENAME}"
 
-# Determine the current CSV URL
-LATEST_CSV_URL=$(wget --user-agent="$USER_AGENT" -q -O - "${PAGE_URL}" | grep -oE 'https://download\.microsoft\.com/download/[^\"]+\.csv' | head -n 1)
+# Fetch the confirmation page content
+PAGE_CONTENT=$(wget --user-agent="$USER_AGENT" -q -O - "${PAGE_URL}")
+
+# Determine the current CSV URL and make sure it's the right download link
+LATEST_CSV_URL=$(echo "${PAGE_CONTENT}" | grep -i 'data-bi-containername="download retry"' | grep -oE 'https://download\.microsoft\.com/download/[^"]+\.csv')
 
 if [ -z "${LATEST_CSV_URL}" ]; then
     echo "Failed to determine the latest CSV URL"
