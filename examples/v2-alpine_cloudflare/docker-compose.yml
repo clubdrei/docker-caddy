@@ -1,0 +1,13 @@
+services:
+  caddy:
+    build:
+      context: ../../
+      dockerfile: ./images/v2-alpine_cloudflare/Dockerfile
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+    environment:
+      CF_ZONE_TOKEN: "YOUR_CF_TOKEN"
+      CF_API_TOKEN: "YOUR_CF_API_TOKEN"
+    ports:
+      - "31080:80"
+      - "31443:443"

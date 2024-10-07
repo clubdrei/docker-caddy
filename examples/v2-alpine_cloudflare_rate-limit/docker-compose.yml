@@ -1,0 +1,10 @@
+services:
+  caddy:
+    build:
+      context: ../../
+      dockerfile: ./images/v2-alpine_cloudflare_rate-limit/Dockerfile
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+    ports:
+      - "31080:80"
+      - "31443:443"
