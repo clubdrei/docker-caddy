@@ -1,0 +1,35 @@
+#
+# This example adds a rate limit for all IPs in "abuseipdb/s100-7d.ipv4.caddyfile" and "127.18.0.1"
+# Check https://github.com/mholt/caddy-ratelimit for more details about the rate_limit module
+#
+:80 {
+    log {
+        output stdout
+        level DEBUG
+    }
+
+    # Respond with a custom error message in case we hit a rate limit
+    handle_errors 429 {
+        respond "Too many requests!"
+    }
+
+    @rateLimitedIPs {
+        # Add your own IP here to check if the rate limit works as expected
+        remote_ip 172.18.0.1
+        import abuseipdb/s100-7d.ipv4.caddyfile
+        import microsoft-public-ip-space/current.caddyfile
+    }
+
+    rate_limit @rateLimitedIPs {
+        zone default {
+            # If you're behind a reverse proxy, you should probably use client_ip instead of remote_ip:
+            # https://github.com/mholt/caddy-ratelimit/issues/19
+            key {remote_ip}
+            events 10
+            window 60s
+        }
+    }
+
+    # No rate limit hit
+    respond "It works!"
+}
