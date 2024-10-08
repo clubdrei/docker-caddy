@@ -43,6 +43,24 @@ jobs:
           push: true
           tags: ${{ vars.CI_REGISTRY_IMAGE }}:v2-alpine_cloudflare
   # Build a custom Caddy docker image with the modules listed below & push it to Quay.io
+  # * http.handlers.rate_limit: https://github.com/mholt/caddy-ratelimit
+  v2-alpine_rate-limit:
+    runs-on: ubuntu-latest
+    environment: Production
+    steps:
+      - name: "Login to ${{ vars.CI_REGISTRY }}"
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ vars.CI_REGISTRY }}
+          username: ${{ secrets.CI_REGISTRY_USER }}
+          password: ${{ secrets.CI_REGISTRY_PASSWORD }}
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          file: images/v2-alpine_rate-limit/Dockerfile
+          push: true
+          tags: ${{ vars.CI_REGISTRY_IMAGE }}:v2-alpine_rate-limit
+  # Build a custom Caddy docker image with the modules listed below & push it to Quay.io
   # * dns.providers.cloudflare: https://github.com/caddy-dns/cloudflare
   # * http.handlers.rate_limit: https://github.com/mholt/caddy-ratelimit
   v2-alpine_cloudflare_rate-limit:
