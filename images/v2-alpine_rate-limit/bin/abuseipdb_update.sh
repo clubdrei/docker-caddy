@@ -34,6 +34,6 @@ echo "Successfully downloaded the AbuseIPDB blocklist to ${TEMP_DOWNLOAD_FILE}"
 true > "${OUTPUT_FILE}"
 
 # Loop through each IP in the AbuseIPDB file, excluding comments, and add remote_ip before each IP so it can be imported in a Caddyfile
-for IP in $(grep -hv '^#' "${TEMP_DOWNLOAD_FILE}"); do
+grep -Eo '^([0-9]{1,3}\.){3}[0-9]{1,3}' "${TEMP_DOWNLOAD_FILE}" | while read -r IP; do
     echo "remote_ip $IP" >> "${OUTPUT_FILE}"
 done
