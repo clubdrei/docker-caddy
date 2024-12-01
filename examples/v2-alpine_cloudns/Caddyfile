@@ -1,0 +1,19 @@
+#
+# This example shows how to setup Let's Encrypt wildcard certificates with ClouDNS
+# Check https://github.com/anxuanzi/caddy-dns-ClouDNS for more details about the ClouDNS module
+#
+*.example.com {
+    log {
+        output stdout
+        level DEBUG
+    }
+
+    tls {
+        dns cloudns {
+            sub_auth_id {env.CLOUDNS_SUB_AUTH_ID}
+            auth_password {env.CLOUDNS_AUTH_PASSWORD}
+        }
+    }
+
+    respond "It works!"
+}
