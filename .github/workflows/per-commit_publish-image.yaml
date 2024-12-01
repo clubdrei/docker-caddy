@@ -73,3 +73,20 @@ jobs:
           file: images/v2-alpine_cloudflare_rate-limit/Dockerfile
           push: true
           tags: ${{ vars.CI_REGISTRY_IMAGE }}:${{ github.sha }}_v2-alpine_cloudflare_rate-limit
+  # Build a custom Caddy docker image with the modules listed below & push it to Quay.io
+  # * dns.providers.cloudns: https://github.com/anxuanzi/caddy-dns-ClouDNS
+  v2-alpine_cloudns:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Login to ${{ vars.CI_REGISTRY }}"
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ vars.CI_REGISTRY }}
+          username: ${{ secrets.CI_REGISTRY_USER }}
+          password: ${{ secrets.CI_REGISTRY_PASSWORD }}
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          file: images/v2-alpine_cloudns/Dockerfile
+          push: true
+          tags: ${{ vars.CI_REGISTRY_IMAGE }}:${{ github.sha }}_v2-alpine_cloudns

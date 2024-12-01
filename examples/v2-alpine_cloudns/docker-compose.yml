@@ -1,0 +1,13 @@
+services:
+  caddy:
+    build:
+      context: ../../
+      dockerfile: ./images/v2-alpine_cloudns/Dockerfile
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+    environment:
+      CLOUDNS_SUB_AUTH_ID: "YOUR_CLOUDNS_SUB_AUTH_ID"
+      CLOUDNS_AUTH_PASSWORD: "YOUR_CLOUDNS_AUTH_PASSWORD"
+    ports:
+      - "31080:80"
+      - "31443:443"
