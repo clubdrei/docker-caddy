@@ -1,7 +1,10 @@
 #!/bin/sh
 
 # Microsoft landing page which contains the URL to the current public IP CSV
-PAGE_URL="https://www.microsoft.com/en-us/download/confirmation.aspx?id=53602"
+PAGE_URL="https://www.microsoft.com/en-us/download/details.aspx?id=53602"
+
+# Pattern to find the CSV url on the landing page
+LATEST_CSV_URL_PATTERN='https://download\.microsoft\.com/download/[^"]+\.csv'
 
 # Microsoft blocks requests from wget without a valid user agent, so we fake one
 USER_AGENT="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.60 Safari/537.36"
@@ -12,8 +15,9 @@ OUTPUT_FILE="${MICROSOFT_PUBLIC_IP_SPACE_LOCAL_BASE_DIRECTORY}/${MICROSOFT_PUBLI
 # Fetch the confirmation page content
 PAGE_CONTENT=$(wget --user-agent="$USER_AGENT" -q -O - "${PAGE_URL}")
 
-# Determine the current CSV URL and make sure it's the right download link
-LATEST_CSV_URL=$(echo "${PAGE_CONTENT}" | grep -i 'data-bi-containername="download retry"' | grep -oE 'https://download\.microsoft\.com/download/[^"]+\.csv')
+# Determine the current CSV URL and make sure it's the right download link.
+# The link exists multiple times on the page, but only once inside 'a href="LINK"', so we use this to find a single occurrence.
+LATEST_CSV_URL=$(echo "${PAGE_CONTENT}" | grep -oE "href=\"${LATEST_CSV_URL_PATTERN}\"" | grep -oE "${LATEST_CSV_URL_PATTERN}")
 
 if [ -z "${LATEST_CSV_URL}" ]; then
     echo "Failed to determine the latest CSV URL"
