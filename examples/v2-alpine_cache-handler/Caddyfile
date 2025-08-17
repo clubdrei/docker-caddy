@@ -1,0 +1,30 @@
+#
+# This example shows how to setup a server that forwards all requests to www.example.com while caching all GET requests
+# Check https://github.com/caddyserver/cache-handler for more details about the cache-handler module
+#
+:80 {
+    log {
+        output stdout
+        level DEBUG
+    }
+
+    cache {
+        # Only cache GET requests
+        allowed_http_verbs GET
+
+        # Cache response for 31 days
+        ttl 2678400s
+
+        # Enforce caching even though example.com returns "no-cache, no-store" in the "Cache-Control" header
+        mode bypass
+
+        # Store response in NutsDB: https://github.com/nutsdb/nutsdb
+        nuts {
+            path /data/cache
+        }
+    }
+
+    reverse_proxy https://www.example.com {
+            header_up Host www.example.com
+    }
+}
