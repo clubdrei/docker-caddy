@@ -1,3 +1,11 @@
+# Repository Moved
+
+This repository has moved to GitLab: https://gitlab.com/clubdrei/docker-caddy
+
+---
+
+# README
+
 Caddy docker images that are used at [clubdrei.com](https://www.clubdrei.com).
 
 * GitHub repository: [https://github.com/clubdrei/docker-caddy](https://github.com/clubdrei/docker-caddy)
